@@ -18,9 +18,9 @@ class Flip:
 
 
         
-    def move(self, v):
+    def move(self, v, t):
         current_time = rospy.Time.now()
-        duration = rospy.Duration(3)
+        duration = rospy.Duration(t)
         final_time = current_time + duration
         while(rospy.Time.now() < final_time):
             self.velocity.linear = Vector3(v, 0, 0)
@@ -35,10 +35,10 @@ class Flip:
 
     def main_loop(self):
         while not rospy.is_shutdown():
-            self.move(-2)
-            self.move(0)
-            self.move(2)
-            self.move(0)
+            self.move(-2, 3)
+            self.move(0, 3)
+            self.move(2, 3)
+            self.move(0, 3)
 
 
         
