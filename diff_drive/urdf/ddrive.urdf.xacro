@@ -1,0 +1,186 @@
+<?xml version='1.0'?>
+
+<robot name="ddrive" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<xacro:property name="yaml_file" value="$(find diff_drive)/config/ddrive.yaml" />
+<xacro:property name="robot_param" value="${load_yaml(yaml_file)}"/>
+<xacro:property name="L" value="${robot_param['L']}" />
+<xacro:property name="W" value="${robot_param['W']}" />
+<xacro:property name="H" value="${robot_param['H']}" />
+<xacro:property name="R1" value="${robot_param['R1']}" />
+<xacro:property name="R2" value="${robot_param['R2']}" />
+<xacro:property name="r" value="${robot_param['r']}" />
+<xacro:property name="l" value="${robot_param['l']}" />
+
+<xacro:include filename="$(find diff_drive)/urdf/ddrive.gazebo" />
+
+
+
+  <link name="base_link"></link>
+
+  <joint name="base_link_joint" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="base_link"/>
+    <child link="chassis" />
+  </joint>
+
+ 
+ 
+
+  <link name='chassis'>
+    <pose>0 0 0 0 0 0</pose>
+
+    <inertial>
+      <mass value="15.0"/>
+      <origin xyz="0.0 0 0.0" rpy=" 0 0 0"/>
+      <inertia
+          ixx="0.1" ixy="0" ixz="0"
+          iyy="0.1" iyz="0"
+          izz="0.1"
+      />
+    </inertial>
+
+    <collision name='chassis_collision'>
+      <origin xyz="0 0 0.0" rpy=" 0 0 0"/> 
+      <geometry>
+        <box size="${L} ${W} ${H}"/>
+      </geometry>
+    </collision>
+
+    <visual name='chassis_visual'>
+      <origin xyz="0 0 0.0" rpy=" 0 0 0"/>
+      <geometry>
+        <box size="${L} ${W} ${H}"/>
+      </geometry>
+    </visual>
+
+
+    
+    <collision name='bottom_caster_collision'>
+      <origin xyz="-0.20 0 -0.05" rpy=" 0 0 0"/>
+      <geometry>
+        <sphere radius="${R2}"/>
+      </geometry>
+    </collision>
+
+    <visual name='bottom_caster_visual'>
+      <origin xyz="-0.20 0 -0.05" rpy=" 0 0 0"/>
+      <geometry>
+        <sphere radius="${R2}"/>
+      </geometry>
+    </visual>
+    
+
+    <collision name='top_caster_collision'>
+      <origin xyz="-0.20 0 0.05" rpy=" 0 0 0"/>
+      <geometry>
+        <sphere radius="${R2}"/>
+      </geometry>
+    </collision>
+
+    <visual name='top_caster_visual'>
+      <origin xyz="-0.20 0 0.05" rpy=" 0 0 0"/>
+      <geometry>
+        <sphere radius="${R2}"/>
+      </geometry>
+    </visual>
+
+
+  </link>
+
+
+ <link name='left_wheel'>
+
+
+    <inertial>
+      <mass value="2.0"/>
+      <origin xyz="0.0 0 0.0" rpy=" 0 1.5707 1.5707"/>
+      <inertia
+          ixx="0.1" ixy="0" ixz="0"
+          iyy="0.1" iyz="0"
+          izz="0.1"
+      />
+    </inertial>
+
+    <collision name='left_wheel_collision'>
+      <origin xyz="0 0 0.0" rpy=" 0 1.5707 1.5707"/> 
+      <geometry>
+        <cylinder radius="${r}" length="${l}"/>
+      </geometry>
+    </collision>
+
+    <visual name='left_wheel_visual'>
+      <origin xyz="0 0 0.0" rpy=" 0 1.5707 1.5707"/>
+      <geometry>
+        <cylinder radius="${r}" length="${l}"/>
+      </geometry>
+    </visual>
+
+</link>
+
+<link name='right_wheel'>
+    
+
+    <inertial>
+      <mass value="2.0"/>
+      <origin xyz="0.0 0 0.0" rpy=" 0 1.5707 1.5707"/>
+      <inertia
+          ixx="0.1" ixy="0" ixz="0"
+          iyy="0.1" iyz="0"
+          izz="0.1"
+      />
+    </inertial>
+
+    <collision name='right_wheel_collision'>
+      <origin xyz="0 0 0.0" rpy=" 0 1.5707 1.5707"/> 
+      <geometry>
+        <cylinder radius="${r}" length="${l}"/>
+      </geometry>
+    </collision>
+
+    <visual name='right_wheel_visual'>
+      <origin xyz="0 0 0.0" rpy=" 0 1.5707 1.5707"/>
+      <geometry>
+        <cylinder radius="${r}" length="${l}"/>
+      </geometry>
+    </visual>
+
+</link>
+
+  <joint type="continuous" name="left_wheel_hinge">
+    <origin xyz="0.14 0.18 0" rpy="0 0 0"/>
+    <child link="left_wheel"/>
+    <parent link="chassis"/>
+    <axis xyz="0 1 0" rpy="0 0 0"/>
+    <mu1>1</mu1> 
+    <mu2>1</mu2>
+    <kp>500000.0</kp>
+    <kd>10.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>0.1</maxVel>
+  </joint>
+  
+  
+  
+  <joint type="continuous" name="right_wheel_hinge">
+    <origin xyz="0.14 -0.18 0" rpy="0 0 0"/>
+    <child link="right_wheel"/>
+    <parent link="chassis"/>
+    <axis xyz="0 1 0" rpy="0 0 0"/>
+    <mu1>1</mu1> 
+    <mu2>1</mu2>
+    <kp>500000.0</kp>
+    <kd>10.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>0.1</maxVel>
+  </joint>
+  
+  
+  
+  
+  
+
+  
+  
+
+</robot>

@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<robot name="ddrive" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+
+<gazebo>
+<plugin name="differential_drive_controller" filename="libgazebo_ros_diff_drive.so">
+<rosDebugLevel>na</rosDebugLevel>
+<alwaysOn>true</alwaysOn>
+<updateRate>100</updateRate>
+<leftJoint>left_wheel_hinge</leftJoint>
+<rightJoint>right_wheel_hinge</rightJoint>
+<wheelSeparation>0.5</wheelSeparation>
+<wheelDiameter>0.08</wheelDiameter>
+<wheelTorque>20</wheelTorque>
+<commandTopic>cmd_vel</commandTopic>
+<odometryTopic>odom</odometryTopic>
+<odometryFrame>odom</odometryFrame>
+<robotBaseFrame>base_link</robotBaseFrame>
+<publishWheelTF>false</publishWheelTF>
+<publishOdomTF>true</publishOdomTF>
+<publishWheelJointState>true</publishWheelJointState>
+<wheelAcceleration>false</wheelAcceleration>
+<odometrySource>world</odometrySource>
+<publishTf>1</publishTf>
+</plugin>
+
+
+
+
+</gazebo>
+<gazebo reference="chassis">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+
+  <gazebo reference="left_wheel">
+    <material>Gazebo/Yellow</material>
+  </gazebo>
+
+  
+  <gazebo reference="right_wheel">
+    <material>Gazebo/Yellow</material>
+  </gazebo>
+
+  </robot>
