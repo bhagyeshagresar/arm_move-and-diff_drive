@@ -1,3 +1,6 @@
+
+#!/usr/bin/env python
+
 from __future__ import print_function
 from six.moves import input
 
@@ -26,12 +29,12 @@ from std_msgs.msg import String
 from moveit_commander.conversions import pose_to_list
 
 
-class Mover:
+class Move:
     def __init__(self):
         
         moveit_commander.roscpp_initialize(sys.argv)
         rospy.init_node("mover", anonymous=True)
-        self.reset = rospy.Service('reset', Empty, self.reset_fn)
+        #self.reset = rospy.Service('reset', Empty, self.reset_fn)
 
 
 
@@ -41,93 +44,83 @@ class Mover:
 
         display_trajectory_publisher = rospy.Publisher("/move_group/display_planned_path", moveit_msgs.msg.DisplayTrajectory,queue_size=20,)
 
-        planning_frame = move_group.get_planning_frame()
-        print("============ Planning frame: %s" % planning_frame)
-
-        group_names = robot.get_group_names()
-        print("============ Available Planning Groups:", robot.get_group_names())
-
-        
-        print("============ Printing robot state")
-        print(robot.get_current_state())
-        print("")
-
-
         group_name = "interbotix_arm"
         move_group = moveit_commander.MoveGroupCommander(group_name)
 
 
-        self.table_name = ""
+        
+
+
+        self.box_name = ""
         self.robot = robot
         self.scene = scene
-        self.move_group = move_group
-        self.display_trajectory_publisher = display_trajectory_publisher
-        self.planning_frame = planning_frame
-        self.eef_link = eef_link
-        self.group_names = group_names
+       
 
-
-
-
-    def add_box(self, timeout=4):
+    def wait_for_state_update(self, box_is_known=False, box_is_attached=False, timeout=4):
         
-        table_name = self.table_name
+        box_name = self.box_name
         scene = self.scene
 
         
-        table_pose = geometry_msgs.msg.PoseStamped()
-        table_pose.header.frame_id = "world"
-        table_pose.pose.orientation.w = 0
-        table_pose.pose.position.z = 0  # above the panda_hand frame
-        table_name = "table"
-        scene.add_box(table_name, table_pose, size=(0.2, 0.02, 0.02))
-        ## END_SUB_TUTORIAL
-        # Copy local variables back to class variables. In practice, you should use the class
-        # variables directly unless you have a good reason not to.
-        self.table_name = table_name
-        return self.wait_for_state_update(box_is_known=True, timeout=timeout)
+        start = rospy.get_time()
+        seconds = rospy.get_time()
+        while (seconds - start < timeout) and not rospy.is_shutdown():
+            # Test if the box is in attached objects
+            attached_objects = scene.get_attached_objects([box_name])
+            is_attached = len(attached_objects.keys()) > 0
 
-    
-    def plan_cartesian_path(self, scale=1):
+            # Test if the box is in the scene.
+            # Note that attaching the box will remove it from known_objects
+            is_known = box_name in scene.get_known_object_names()
+
+            # Test if we are in the expected state
+            if (box_is_attached == is_attached) and (box_is_known == is_known):
+                return True
+
+            # Sleep so that we give other threads time on the processor
+            rospy.sleep(0.1)
+            seconds = rospy.get_time()
+
+        # If we exited the while loop without returning then we timed out
+        return False
+        ## END_SUB_TUTORIAL
+
+    def add_box(self, timeout=4):
+        rospy.sleep(3)
         # Copy class variables to local variables to make the web tutorials more clear.
         # In practice, you should use the class variables directly unless you have a good
         # reason not to.
-        move_group = self.move_group
+        box_name = self.box_name
+        scene = self.scene
 
-        ## BEGIN_SUB_TUTORIAL plan_cartesian_path
+        ## BEGIN_SUB_TUTORIAL add_box
         ##
-        ## Cartesian Paths
-        ## ^^^^^^^^^^^^^^^
-        ## You can plan a Cartesian path directly by specifying a list of waypoints
-        ## for the end-effector to go through. If executing  interactively in a
-        ## Python shell, set scale = 1.0.
-        ##
-        waypoints = rosparam.load("~/waypoints.yaml")
+        ## Adding Objects to the Planning Scene
+        ## ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        ## First, we will create a box in the planning scene between the fingers:
+        box_pose = geometry_msgs.msg.PoseStamped()
+        box_pose.header.frame_id = "world"
+        box_pose.pose.orientation.w = 1.0
+        box_pose.pose.position.x = 0
+        box_pose.pose.position.y = 0
+        box_pose.pose.position.z = 0  # above the panda_hand frame
+        box_name = "box"
+        #scene.add_box(box_name, box_pose, size=(0.075, 0.075, 0.075))
 
-        wpose = move_group.get_current_pose().pose
-        wpose.position.z -= scale * 0.1  # First move up (z)
-        wpose.position.y += scale * 0.2  # and sideways (y)
-        waypoints.append(copy.deepcopy(wpose))
-
-        wpose.position.x += scale * 0.1  # Second move forward/backwards in (x)
-        waypoints.append(copy.deepcopy(wpose))
-
-        wpose.position.y -= scale * 0.1  # Third move sideways (y)
-        waypoints.append(copy.deepcopy(wpose))
-
-        # We want the Cartesian path to be interpolated at a resolution of 1 cm
-        # which is why we will specify 0.01 as the eef_step in Cartesian
-        # translation.  We will disable the jump threshold by setting it to 0.0,
-        # ignoring the check for infeasible jumps in joint space, which is sufficient
-        # for this tutorial.
-        (plan, fraction) = move_group.compute_cartesian_path(
-            waypoints, 0.01, 0.0  # waypoints to follow  # eef_step
-        )  # jump_threshold
-
-        # Note: We are just planning, not asking move_group to actually move the robot yet:
-        return plan, fraction
+        ## END_SUB_TUTORIAL
+        # Copy local variables back to class variables. In practice, you should use the class
+        # variables directly unless you have a good reason not to.
+        self.box_name = box_name
+        while not self.wait_for_state_update(box_is_known=True):
+            scene.add_box(box_name,box_pose, size=(0.26, 0.26, 0.0))
+    
+def main():
+    n = Move()
+    n.add_box()
+            
 
 
 
-    def reset_fn(self, req):
-        rospy.loginfo("reset is working")
+
+if __name__ == "__main__":
+    main()

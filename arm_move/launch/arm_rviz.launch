@@ -1,6 +1,6 @@
 <launch>
 
-  <arg name="robot_model"                       default=""/>
+  <arg name="robot_model"                       default="px100"/>
   <arg name="robot_name"                        default="$(arg robot_model)"/>
   <arg name="base_link_frame"                   default="base_link"/>
   <arg name="show_ar_tag"                       default="false"/>
@@ -67,5 +67,10 @@
     <arg name="rviz_frame"                        value="$(arg rviz_frame)"/>
     <arg name="config"                            value="true"/>
   </include>
+
+<node name="mover" pkg="arm_move" type="mover.py" ns="px100">
+   <remap from="/attached_collision_object" to="/px100/attached_collision_object"/>
+   <remap from="/collision_object" to="/px100/collision_object"/>
+</node>
 
 </launch>
