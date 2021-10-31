@@ -16,20 +16,29 @@ class Flip:
         rospy.init_node("flip")
         self.rate = rospy.Rate(20)
 
+
         
-    
+    def move(self, v):
+        current_time = rospy.Time.now()
+        duration = rospy.Duration(3)
+        final_time = current_time + duration
+        while(rospy.Time.now() < final_time):
+            self.velocity.linear = Vector3(v, 0, 0)
+            self.velocity.angular = Vector3(0, 0, 0)
+            self.velocity_pub.publish(self.velocity)
+            self.rate.sleep()
+
+        
 
 
 
 
     def main_loop(self):
         while not rospy.is_shutdown():
-            t = rospy.get_time()
-            while (t < 5.0):
-                self.velocity.linear = Vector3(-0.5, 0, 0)
-                self.velocity.angular = Vector3(0, 0, 0)
-                self.velocity_pub.publish(self.velocity)
-                self.rate.sleep()
+            self.move(-2)
+            self.move(0)
+            self.move(2)
+            self.move(0)
 
 
         
