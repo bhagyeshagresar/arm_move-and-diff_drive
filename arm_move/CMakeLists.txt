@@ -57,6 +57,7 @@ find_package(catkin REQUIRED COMPONENTS
  add_service_files(
    FILES
    Step.srv
+   Reset.srv
  )
 
 ## Generate actions in the 'action' folder
@@ -159,7 +160,7 @@ include_directories(
 ## Mark executable scripts (Python etc.) for installation
 ## in contrast to setup.py, you can choose the destination
  catkin_install_python(PROGRAMS
-   nodes/mover.py
+   nodes/mover
    DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
  )
 
