@@ -73,4 +73,6 @@
    <remap from="/collision_object" to="/px100/collision_object"/>
 </node>
 
+<rosparam command = "load" file = "$(find arm_move)/config/waypoints.yaml" /> 
+
 </launch>
