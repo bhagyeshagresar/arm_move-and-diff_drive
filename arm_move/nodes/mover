@@ -114,14 +114,61 @@ class Move:
         
         self.box_name = box_name
         while not self.wait_for_state_update(box_is_known=True):
-            scene.add_box(box_name,self.box_pose, size=(0.26, 0.26, 0))
+            scene.add_box(box_name,self.box_pose, size=(1.2, 1.2, 0))
 
+    '''
+    
+    def wait_for_state_update2(self, box_is_known=False, box_is_attached=False, timeout=4):
+        
+        box_name2 = self.box_name2
+        scene = self.scene
+
+        
+        start = rospy.get_time()
+        seconds = rospy.get_time()
+        while (seconds - start < timeout) and not rospy.is_shutdown():
+            # Test if the box is in attached objects
+            attached_objects = scene.get_attached_objects([box_name2])
+            is_attached = len(attached_objects.keys()) > 0
+
+            # Test if the box is in the scene.
+            # Note that attaching the box will remove it from known_objects
+            is_known = box_name2 in scene.get_known_object_names()
+
+            # Test if we are in the expected state
+            if (box_is_attached == is_attached) and (box_is_known == is_known):
+                return True
+
+            # Sleep so that we give other threads time on the processor
+            rospy.sleep(0.1)
+            seconds = rospy.get_time()
+
+        # If we exited the while loop without returning then we timed out
+        return False
 
     
+    def add_box2(self, timeout=4):
+        rospy.sleep(3)
+        
+        box_name2 = self.box_name2
+        scene = self.scene
 
-
+        
+        self.box_pose2 = geometry_msgs.msg.PoseStamped()
+        self.box_pose2.header.frame_id = "world"
+        self.box_pose2.pose.orientation.w = 1.0
+        self.box_pose2.pose.position.x = 0
+        self.box_pose2.pose.position.y = 0.2
+        self.box_pose2.pose.position.z = 0.01905 
+        box_name3 = "box_2"
+        
+        self.box_name2 = box_name2
+        while not self.wait_for_state_update2(box_is_known=True):
+            scene.add_box(box_name2,self.box_pose2, size=(0.024, 0.0381, 0.0381))
+            
     
-    
+        '''
+     
 
 
 
@@ -164,9 +211,9 @@ class Move:
         self.box_pose3 = geometry_msgs.msg.PoseStamped()
         self.box_pose3.header.frame_id = "world"
         self.box_pose3.pose.orientation.w = 1.0
-        self.box_pose3.pose.position.x = 0.2
+        self.box_pose3.pose.position.x = 0.15
         self.box_pose3.pose.position.y = 0.2
-        self.box_pose3.pose.position.z = 0  
+        self.box_pose3.pose.position.z = 0.025
         box_name3 = "box_3"
         
         self.box_name3 = box_name3
@@ -174,7 +221,8 @@ class Move:
             scene.add_box(box_name3,self.box_pose3, size=(0.14, 0.09, 0.05))
 
 
-
+    
+            
 
 
 
@@ -217,9 +265,9 @@ class Move:
             set_gripper
         ]
         self.move_group.set_pose_target(pose_goal, self.move_group.get_end_effector_link())
-        (a, b, c, d) = self.move_group.plan()
+        (a, b, c, error_code) = self.move_group.plan()
 
-        if d.val == 1:
+        if error_code.val == 1:
             
             self.move_group.go(pose_goal)
             self.waypoints.append(waypoints_list)
@@ -233,12 +281,13 @@ class Move:
         else:
             self.move_group.stop()
 
-        return 0
+        return error_code.val
         
     
     def follow_fn(self, req):
         
         for i in self.waypoints:
+            rospy.logerr(i)
             pose_goal = geometry_msgs.msg.Pose()
             pose_goal.position.x = i[0]
             pose_goal.position.y = i[1]
@@ -268,6 +317,7 @@ class Move:
 def main():
     n = Move()
     n.add_box()
+    #n.add_box2()
     n.add_box3()
     rospy.spin()
     

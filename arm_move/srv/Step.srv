@@ -7,4 +7,4 @@ float64 z1
 float64 w
 bool a
 ---
-float64 b
+int32 b
