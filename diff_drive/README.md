@@ -9,7 +9,7 @@ The package consists of `flip` node that makes a custom made differential drive 
 
 1. Compile the workspace using `catkin_make`
 2. Source the setup script of the workspace using `source devel/setup.bash`
-3. Run the launchfile ddrive.launch using `roslaunch diff_drive ddrive.launch use_fake:=true`
+3. Run the launchfile ddrive.launch using `roslaunch diff_drive ddrive.launch`
 
 
 # Video Demonstration of the Robot doing flips
