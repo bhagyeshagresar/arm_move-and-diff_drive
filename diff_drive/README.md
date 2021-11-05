@@ -12,7 +12,7 @@ The package consists of `flip` node that makes a custom made differential drive 
 3. Run the launchfile ddrive.launch using `roslaunch diff_drive ddrive.launch use_fake:=true`
 
 
-#Video Demonstration of the Robot doing flips
+# Video Demonstration of the Robot doing flips
 
 ![flip](https://user-images.githubusercontent.com/82998852/140469253-8fb2db6e-1ee6-4918-a62f-f99d30edc294.gif)
 
