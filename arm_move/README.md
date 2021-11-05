@@ -14,12 +14,12 @@ The package consists of `mover` node which makes the `PX100` robot arm follow a 
 5. For testing the arm in real world run `roslaunch arm_move arm.launch use_actual:=true`
 
 
-#Video Demonstration of the Robot achieving the task in Gazebo
+# Video Demonstration of the Robot achieving the task in Gazebo
 
 https://drive.google.com/file/d/1QURlXK5FowxnLMrKvKwXF4iNkWYaso2w/view?usp=sharing
 
 
 
-#Video Demonstration of the Robot achieving the task in real world
+# Video Demonstration of the Robot achieving the task in real world
 
 https://drive.google.com/file/d/17NQ39kb6eSu9Mzt0Y28J7WXMAGL5oIDV/view?usp=sharing
