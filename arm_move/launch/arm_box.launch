@@ -26,7 +26,7 @@
     <arg name="use_sim_time" value="true"/>
     <arg name="debug" value="false"/>
     <arg name="gui" value="true" />
-    <arg name="world_name" value="$(find arm_move)/world/my_robot_world"/>
+    <arg name="world_name" value="$(find arm_move)/world/my_robot.world"/>
 </include>
 
   <group if="$(arg use_trajectory_controllers)">

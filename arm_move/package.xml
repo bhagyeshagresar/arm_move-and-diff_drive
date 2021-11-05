@@ -39,6 +39,13 @@
   <!-- Use build_depend for packages you need at compile time: -->
   <build_depend>message_generation</build_depend>
   <exec_depend>message_runtime</exec_depend>
+  <test_depend>rostest</test_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>std_msgs</build_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+
+
 
   <!-- Use build_export_depend for packages you need in order to build against this package: -->
   <!--   <build_export_depend>message_generation</build_export_depend> -->

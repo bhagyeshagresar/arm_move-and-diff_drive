@@ -1,13 +1,17 @@
 <launch>
 
-  <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find diff_drive)/urdf/ddrive.urdf.xacro'" />
 
-  
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+<param name="robot_description" command="$(find xacro)/xacro --inorder '$(find diff_drive)/urdf/ddrive.urdf.xacro'" />
 
-  <node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
-  </node>
+<!-- robot_state_publisher  node -->
+<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
+
+<!-- joint_state_publisher_gui -->
+<node name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui">
+</node>
   
-  
+<!--rviz -->
 <node name="rviz" pkg="rviz" type="rviz" args = "-d $(find diff_drive)/config/diff_drive.rviz"/>
+
+
 </launch>

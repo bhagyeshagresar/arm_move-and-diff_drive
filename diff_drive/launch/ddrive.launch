@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
-
-
-
-
-
-
 <launch>
 
 <arg name="x" default="0"/>
 <arg name="y" default="0"/>
-<arg name="z" default="0.2"/>
+<arg name="z" default="0.0"/>
 <arg name="roll" default="0"/>
 <arg name="pitch" default="0"/>
 <arg name="yaw" default="0"/>
 
+<!-- include ddrive_rviz launch file -->
 <include file="$(find diff_drive)/launch/ddrive_rviz.launch"/>
 
 <!-- launch Gazebo World -->
@@ -27,11 +21,14 @@
     <arg name="world_name" value="$(find diff_drive)/world/ddrive.world"/>
 </include>
 
-<param name="robot_description" command="$(find xacro)/xacro --inorder '$(find diff_drive)/urdf/ddrive.urdf.xacro'"/>
+<!-- flip node -->
+<node name="flip" type="flip.py" pkg="diff_drive" output="screen">
+</node>
 
-<node name="robot_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen" 
-        args="-urdf -param robot_description -model diff_drive 
-              -x $(arg x) -y $(arg y) -z $(arg z)
-              -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)"/>
+<!-- spawn urdf robot -->
+<node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"
+     args="-urdf -param robot_description -model ddrive -z 0.25" />
+
+
 
 </launch>

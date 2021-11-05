@@ -9,8 +9,8 @@
 <updateRate>100</updateRate>
 <leftJoint>left_wheel_hinge</leftJoint>
 <rightJoint>right_wheel_hinge</rightJoint>
-<wheelSeparation>0.5</wheelSeparation>
-<wheelDiameter>0.08</wheelDiameter>
+<wheelSeparation>0.35</wheelSeparation>
+<wheelDiameter>0.16</wheelDiameter>
 <wheelTorque>20</wheelTorque>
 <commandTopic>cmd_vel</commandTopic>
 <odometryTopic>odom</odometryTopic>
@@ -34,11 +34,28 @@
 
   <gazebo reference="left_wheel">
     <material>Gazebo/Yellow</material>
+    <mu1>999</mu1>
+    <mu2>999</mu2>
+    <kp>500000.0</kp>
+    <kd>10.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>0.1</maxVel>
+    <fdir1>1 0 0</fdir1>
   </gazebo>
 
   
   <gazebo reference="right_wheel">
     <material>Gazebo/Yellow</material>
+    <mu1>999</mu1>
+    <mu2>999</mu2>
+    <kp>500000.0</kp>
+    <kd>10.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>0.1</maxVel>
+    <fdir1>1 0 0</fdir1>
   </gazebo>
+
+
+
 
   </robot>
