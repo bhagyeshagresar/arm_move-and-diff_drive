@@ -1,4 +1,5 @@
 <launch>
+<!-- launch Custom Gazebo World with px100 Robot, Realsense Box and a small box which is picked up -->
 
   <arg name="robot_model"                       default="px100"/>
   <arg name="robot_name"                        default="$(arg robot_model)"/>

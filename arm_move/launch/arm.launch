@@ -1,4 +1,5 @@
 <launch>
+<!-- launches Gazebo and Moveit Rviz alongwith the PX100 Robot, Realsense Box and Small Object which is picked up by the arm -->
 
   <arg name="robot_model"                       default="px100"/>
   <arg name="robot_name"                        default="$(arg robot_model)"/>
