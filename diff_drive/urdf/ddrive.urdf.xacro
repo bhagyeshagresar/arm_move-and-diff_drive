@@ -4,6 +4,7 @@
 
 <xacro:property name="yaml_file" value="$(find diff_drive)/config/ddrive.yaml" />
 <xacro:property name="robot_param" value="${load_yaml(yaml_file)}"/>
+<xacro:property name="M" value="${robot_param['M']}" />
 <xacro:property name="L" value="${robot_param['L']}" />
 <xacro:property name="W" value="${robot_param['W']}" />
 <xacro:property name="H" value="${robot_param['H']}" />
@@ -11,6 +12,7 @@
 <xacro:property name="R2" value="${robot_param['R2']}" />
 <xacro:property name="r" value="${robot_param['r']}" />
 <xacro:property name="l" value="${robot_param['l']}" />
+<xacro:property name="m" value="${robot_param['m']}" />
 
 <xacro:include filename="$(find diff_drive)/urdf/ddrive.gazebo" />
 
@@ -31,7 +33,7 @@
     <pose>0 0 0.0 0 0 0</pose>
 
     <inertial>
-      <mass value="5.0"/>
+      <mass value="${M}"/>
       <origin xyz="0.0 0 0.0" rpy=" 0 0 0"/>
       <inertia
           ixx="0.1" ixy="0" ixz="0"
@@ -121,7 +123,7 @@
 
 
     <inertial>
-      <mass value="8"/>
+      <mass value="${m}"/>
       <origin xyz="0.0 0 0.0" rpy=" 0 1.5707 1.5707"/>
       <inertia
           ixx="0.1" ixy="0" ixz="0"
@@ -150,7 +152,7 @@
     
 
     <inertial>
-      <mass value="8.0"/>
+      <mass value="${m}"/>
       <origin xyz="0.0 0 0.0" rpy=" 0 1.5707 1.5707"/>
       <inertia
           ixx="0.1" ixy="0" ixz="0"
