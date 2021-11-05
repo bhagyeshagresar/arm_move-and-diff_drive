@@ -2,10 +2,10 @@
 <!-- launch file to test mover node  -->
 
 
-<test test-name="arm_test" pkg="arm_move" type="services_test.py" />
+<test test-name="arm_test" pkg="arm_move" type="test_services.py" />
 
 <include file="$(find arm_move)/launch/arm.launch" >
-    <arg name="use_rviz"                          value="false"/>
+    
     <arg name="use_moveit_rviz"                       value="false"/>
     <arg name="use_fake"                          value="true"/>
 </include> 
